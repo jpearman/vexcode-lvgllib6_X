@@ -22,6 +22,11 @@ extern "C" {
 #define LV_MATH_MAX(a, b) ((a) > (b) ? (a) : (b))
 #define LV_MATH_ABS(x) ((x) > 0 ? (x) : (-(x)))
 
+#define LV_IS_SIGNED(t) (((t)(-1)) < ((t) 0))
+#define LV_UMAX_OF(t) (((0x1ULL << ((sizeof(t) * 8ULL) - 1ULL)) - 1ULL) | (0xFULL << ((sizeof(t) * 8ULL) - 4ULL)))
+#define LV_SMAX_OF(t) (((0x1ULL << ((sizeof(t) * 8ULL) - 1ULL)) - 1ULL) | (0x7ULL << ((sizeof(t) * 8ULL) - 4ULL)))
+#define LV_MAX_OF(t) ((unsigned long) (LV_IS_SIGNED(t) ? LV_SMAX_OF(t) : LV_UMAX_OF(t)))
+
 #define LV_TRIGO_SIN_MAX 32767
 #define LV_TRIGO_SHIFT 15 /**<  >> LV_TRIGO_SHIFT to normalize*/
 
@@ -53,6 +58,21 @@ int16_t lv_trigo_sin(int16_t angle);
  * @return the value calculated from the given parameters in range of [0..LV_BEZIER_VAL_MAX]
  */
 int32_t lv_bezier3(uint32_t t, int32_t u0, int32_t u1, int32_t u2, int32_t u3);
+
+/**
+ * Calculate the atan2 of a vector.
+ * @param x
+ * @param y
+ * @return the angle in degree calculated from the given parameters in range of [0..360]
+ */
+uint16_t lv_atan2(int x, int y);
+
+/**
+ * Calculate the integer square root of a number.
+ * @param num
+ * @return square root of 'num'
+ */
+uint32_t lv_sqrt(uint32_t num);
 
 /**********************
  *      MACROS
